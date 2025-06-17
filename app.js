@@ -1,0 +1,20 @@
+const express = require('express');
+const app = express();
+const morgan = require('morgan');
+const userRoute = require('./routes/userRoute');
+const AppError = require('./utils/appError');
+
+app.use(express.json());
+
+app.use(morgan('dev'));
+
+app.use('/api/auth', userRoute);
+
+app.all('*', (req, res, next) => {
+  return next(
+    new AppError(`${req.originalUrl} is not found on this server`, 404)
+  );
+  next();
+});
+
+module.exports = app;
