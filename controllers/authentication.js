@@ -148,7 +148,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError('You are not logged in', 401));
   }
 
-  const decoded = await new Promise((reolve, reject) => {
+  const decoded = await new Promise((resolve, reject) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         const message =
@@ -177,7 +177,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.roles)) {
+    if (!roles.includes(req.user.accountType)) {
       return next(new AppError('Unathorised action'));
     }
     next();
